@@ -6,11 +6,18 @@ class Logs:
             this is the basic configuration for the logger
             '''
             lg.basicConfig(filename="logs.log",
-                                  level=lg.INFO,
+                                  level=lg.DEBUG,
                                   format='%(module)s:: %(asctime)s :: %(levelname)s :: %(message)s')
 
         except Exception as e:
             raise Exception("Something is wrong with basicconfig")
+
+    def debug(self, log):
+        try:
+            self.basicconfig()
+            return lg.debug(log)
+        except Exception as e:
+            print("logs.INFO is not working")
 
     def info(self, log):
         try:

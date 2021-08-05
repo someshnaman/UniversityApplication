@@ -1,41 +1,88 @@
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
-from logger import Logs as log
+import logger
+from congifugration import Config
+from dbqueries import Dbqueries
+
+logs = logger.Logs()
 
 
 class Database:
-    def __init__(self, client_id, client_secret):
-        """
-        This function will require for setting up our database
-        """
-        self.client_id = client_id
-        self.client_secret = client_secret
+    database_section_name = "database"
+    session = None
 
-    def database_connection(self):
+    def connection(self):
         """
-        This Function will help us in the connnection to the database
+        This Function will help us in the connection to the database
 
         """
         try:
-            cloud_config = {'secure_connect_bundle': r'resources/secure-connect-mydatabase.zip',
+            config_object = Config()
+            bundle_file_path = config_object.getConfig(self.database_section_name, "cassandra_bundle_path")
+            cloud_config = {'secure_connect_bundle': bundle_file_path,
                             'init-query-timeout': 10,
                             'connect_timeout': 10,
                             'set-keyspace-timeout': 10
                             }
-            auth_provider = PlainTextAuthProvider(username=f'{self.client_id}',
-                                                  password=f'{self.client_secret}')
+
+            client_id = config_object.getConfig(self.database_section_name,
+                                                "client_id")  # Bringing client_id from config.ini
+            client_secret = config_object.getConfig(self.database_section_name,
+                                                    "client_secret")  # Bringing client_secret from config.ini
+            auth_provider = PlainTextAuthProvider(username=client_id,
+                                                  password=client_secret)
             cluster = Cluster(cloud=cloud_config,
-                              auth_provider=auth_provider,)
-            session=cluster.connect()
-            row = session.execute("select release_version from system.local").one()
-            if row:
-                log.info(f"row[0] ,Connection Established",)
-            return row
+                              auth_provider=auth_provider, )
+            session = cluster.connect()
+            db_keyspace = config_object.getConfig(self.database_section_name,
+                                                  "keyspace_name")  # Setting up Keyspace
+            session.execute(f"use {db_keyspace}").one()
+            logs.info("Connection Established")
+            return session
         except Exception as e:
-            log.error(e)
+            logs.error(e)
 
-somesh=Database("FxthvapkTAzHqHmYvAfIpMmO",",xUtYFPsfmbBLdWZUr.WG4tr7NiUDeCtodpwodjdY-_zq6Xl7wc.81iQOZWOBa51rAu+jvkCfvFgaZsQXuJ3mE6.u-ehZp9k-SWr1eiw1BQ7GdbOvHrzegqr1LbgH1X8")
-somesh.database_connection()
+    def findAll(self, table_name):
+        try:
+            """
+            This function will fetch all the data available in the Table            
+            """
+            db=Database()
+            mysession = db.connection()
+            result = mysession.execute(f"select * from {table_name}")
+            return result
+        except Exception as e:
+            logs.exception(f"Can't find the values from the table {table_name},{e}")
 
+    def executeSpecific(self, condition, query):
+        try:
+            prepare_query = self.session.prepare(query)
+            binding_values = prepare_query.bind(condition)
+            result = self.session.execute(binding_values)
+            logs.debug(f"Executed : {binding_values}")
+            return result
+        except Exception as e:
+            logs.exception(e)
+
+    def insert(self, query, values):
+        try:
+            prepare_query = self.session.prepare(query)
+            binding_values = prepare_query.bind(values)
+            results = self.session.execute(binding_values)
+            logs.info(f'Successfully inserted ')
+            return results
+        except Exception as e:
+            logs.exception(e)
+
+    def update(self, id, query, values):
+        try:
+            values.append(id)
+            prepare_query = self.session.prepare(query)
+            binding_values = prepare_query.bind(values)
+            results = self.session.execute(binding_values)
+            logs.info(f'Successfully update ')
+            return results
+        except Exception as e:
+            logs.exception(e)
 
 
