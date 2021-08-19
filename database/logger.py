@@ -1,4 +1,6 @@
 import logging as lg
+
+
 class Logs:
     def basicconfig(self):
         try:
@@ -6,12 +8,14 @@ class Logs:
             this is the basic configuration for the logger
             '''
             lg.basicConfig(filename="logs.log",
-                                  level=lg.DEBUG,
-                                  format='%(module)s:: %(asctime)s :: %(levelname)s :: %(message)s')
+                           level=lg.DEBUG,
+                           format='%(module)s:: %(asctime)s :: %(levelname)s :: %(message)s')
+
 
         except Exception as e:
             raise Exception("Something is wrong with basicconfig")
 
+    # noinspection PyBroadException
     def debug(self, log):
         try:
             self.basicconfig()
@@ -53,3 +57,4 @@ class Logs:
             return lg.exception(log)
         except Exception as e:
             print("logs.EXCEPTION is not working")
+
