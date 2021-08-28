@@ -1,18 +1,22 @@
 from database.cassandradatabase import Database
 from database.logger import Logs
 import database.constants as constants
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, TextAreaField, IntegerField
+from wtforms.validators import DataRequired
 
 logs = Logs()
 
 
-class Course:
+class Course():
+
     def __init__(self):
         self.course_id = None
         self.course_code = None
-        self.courseName = None
-        self.courseDesc = None
-        self.courseImageUrl = None
-        self.courseDuration = None
+        self.course_name = None
+        self.course_desc = None
+        self.course_imageUrl = None
+        self.course_duration = None
         # self.createdOn = None  # Datatype would be Timestamp
         # self.modifiedOn = None  # Datatype would be Timestamp
 
@@ -25,7 +29,7 @@ class Course:
         self.course_duration = course_duration
 
 
-class CourseDao: # Data access Object
+class CourseDao:  # Data access Object
     def insertCourse(self, value):
         try:
             """
@@ -39,12 +43,23 @@ class CourseDao: # Data access Object
         except Exception as e:
             logs.exception(e)
 
+    def findCourseById(self, course_id):
+        try:
+            db_object = Database()
+            result = db_object.session.execute(f"select * from course1 where courseID={course_id}")
+            course_object = Course(result[0].courseid, result[0].coursecode,
+                                   result[0].coursedesc, result[0].coursename,
+                                   result[0].courseduration, result[0].courseimageurl)
+            return course_object
+        except Exception as e:
+            logs.exception(e)
+
     def findAllCourses(self):
         try:
             db_object = Database()
-            find_result = db_object.findAll("course1")
+            course_result = db_object.findAll("course1")
             course_list = []
-            for i in find_result:
+            for i in course_result:
                 course_list.append(self.convertToCourse(i))
             return course_list
         except Exception as e:
@@ -60,3 +75,11 @@ class CourseDao: # Data access Object
             logs.exception(e)
 
 
+class CourseForm(FlaskForm):
+    course_id = IntegerField('Course Id', validators=[DataRequired()])
+    course_code = StringField('Course Code', validators=[DataRequired()])
+    course_name = StringField('Course Name', validators=[DataRequired()])
+    course_desc = StringField('Course Desc', validators=[DataRequired()])
+    course_imageUrl = StringField('Course Image Url')
+    course_duration = IntegerField('Course Duration', validators=[DataRequired()])
+    submit = SubmitField('Add Course')

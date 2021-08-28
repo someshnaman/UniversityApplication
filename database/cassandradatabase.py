@@ -3,13 +3,12 @@ from cassandra.auth import PlainTextAuthProvider
 from database.logger import Logs
 from database.congifugration import Config
 import json
-from cassandra.cqlengine import columns
-from cassandra.cqlengine.management import sync_table
+
 
 logs = Logs()
 
 
-class Database:
+class Database():
     database_section_name = "database"
 
     def __init__(self):
@@ -20,12 +19,7 @@ class Database:
         try:
             config_object = Config()
             bundle_file_path = config_object.getConfig(self.database_section_name, "cassandra_bundle_path")
-            cloud_config = {'secure_connect_bundle': bundle_file_path,
-                            'init-query-timeout': 10,
-                            'connect_timeout': 10,
-                            'set-keyspace-timeout': 10
-                            }
-
+            cloud_config = {'secure_connect_bundle': bundle_file_path}
             client_id = config_object.getConfig(self.database_section_name,
                                                 "client_id")  # Bringing client_id from config.ini
             client_secret = config_object.getConfig(self.database_section_name,
@@ -33,8 +27,12 @@ class Database:
             auth_provider = PlainTextAuthProvider(username=client_id,
                                                   password=client_secret)
             cluster = Cluster(cloud=cloud_config,
-                              auth_provider=auth_provider, )
+                              auth_provider=auth_provider, protocol_version=3,
+                              connect_timeout=30,
+                              control_connection_timeout=10.0)
+
             session = cluster.connect()
+
             db_keyspace = config_object.getConfig(self.database_section_name,
                                                   "keyspace_name")  # Setting up Keyspace
             session.execute(f"use {db_keyspace}").one()
@@ -70,7 +68,6 @@ class Database:
 
     def insert(self, query, values):
         try:
-            # values=[repr(s).encode('utf-8') for s in values]
             prepare_query = self.session.prepare(query)
             binding_values = prepare_query.bind(values)
             results = self.session.execute(binding_values)
@@ -89,6 +86,3 @@ class Database:
             return results
         except Exception as e:
             logs.exception(e)
-
-
-

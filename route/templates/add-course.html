@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Add Course</legend>
+            <div class="form-group">
+                {{ form.course_id.label(class="form-control-label") }}
+
+                {% if form.course_id.errors %}
+                {{ form.course_id(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.course_id.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.course_id(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.course_code.label(class="form-control-label") }}
+                {% if form.course_code.errors %}
+                {{ form.course_code(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.course_code.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.course_code(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.course_name.label(class="form-control-label") }}
+                {% if form.course_name.errors %}
+                {{ form.course_name(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.course_name.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.course_name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.course_desc.label(class="form-control-label") }}
+                {% if form.course_desc.errors %}
+                {{ form.course_desc(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.course_desc.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.course_desc(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.course_imageUrl.label(class="form-control-label") }}
+                {% if form.course_imageUrl.errors %}
+                {{ form.course_imageUrl(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.course_imageUrl.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.course_imageUrl(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.course_duration.label(class="form-control-label") }}
+                {% if form.course_duration.errors %}
+                {{ form.course_duration(class="form-control form-control-lg is-invalid") }}
+                <div class="invalid-feedback">
+                    {% for error in form.course_duration.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.course_duration(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
+
+<!--<form action="">-->
+<!--  <label for="courseid">Cousre Id:</label>-->
+<!--  <input type="text" id="courseid" name="courseid"><br><br>-->
+
+<!--  <label for="courseid">Cousre Id:</label>-->
+<!--  <input type="text" id="courseid" name="courseid"><br><br>-->
+
+<!--  <label for="courseid">Cousre Id:</label>-->
+<!--  <input type="text" id="courseid" name="courseid"><br><br>-->
+
+<!--  <label for="courseid">Cousre Id:</label>-->
+<!--  <input type="text" id="courseid" name="courseid"><br><br>-->
+
+<!--  <input type="submit" value="Submit">-->
+<!--</form>-->

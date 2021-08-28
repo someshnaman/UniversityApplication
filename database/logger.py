@@ -1,13 +1,16 @@
 import logging as lg
+import sys
 
 
 class Logs:
+    sys.tracebacklimit = 0
+
     def basicconfig(self):
         try:
             '''
             this is the basic configuration for the logger
             '''
-            lg.basicConfig(filename="logs.log",
+            lg.basicConfig(filename="../logs.log",
                            level=lg.DEBUG,
                            format='%(module)s:: %(asctime)s :: %(levelname)s :: %(message)s')
 
@@ -57,4 +60,3 @@ class Logs:
             return lg.exception(log)
         except Exception as e:
             print("logs.EXCEPTION is not working")
-
