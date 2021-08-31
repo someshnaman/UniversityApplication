@@ -1,6 +1,6 @@
 from configparser import ConfigParser
+
 from database.logger import Logs
-import os
 
 logs = Logs()
 

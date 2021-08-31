@@ -1,9 +1,10 @@
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, IntegerField
+from wtforms.validators import DataRequired
+
+import database.constants as constants
 from database.cassandradatabase import Database
 from database.logger import Logs
-import database.constants as constants
-from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, IntegerField
-from wtforms.validators import DataRequired
 
 logs = Logs()
 

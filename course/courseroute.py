@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, url_for, flash
-from .coursemodel import CourseDao, CourseForm
 from flask import render_template
+
+from .coursemodel import CourseDao, CourseForm
 
 course_blueprint = Blueprint("course_blueprint", __name__)
 

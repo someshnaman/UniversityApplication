@@ -1,9 +1,10 @@
-from cassandra.cluster import Cluster
-from cassandra.auth import PlainTextAuthProvider
-from database.logger import Logs
-from database.congifugration import Config
 import json
 
+from cassandra.auth import PlainTextAuthProvider
+from cassandra.cluster import Cluster
+
+from database.congifugration import Config
+from database.logger import Logs
 
 logs = Logs()
 
@@ -30,7 +31,7 @@ class Database():
                               auth_provider=auth_provider, protocol_version=3,
                               connect_timeout=30,
                               control_connection_timeout=10.0)
-
+            print(cluster.contact_points)
             session = cluster.connect()
 
             db_keyspace = config_object.getConfig(self.database_section_name,
@@ -84,5 +85,12 @@ class Database():
             results = self.session.execute(binding_values)
             logs.info(f'Successfully update ')
             return results
+        except Exception as e:
+            logs.exception(e)
+
+    def delete(self, course_id):
+        try:
+            self.session.execute(f"DELETE FROM course1"
+                                 f"WHERE id={course_id} IF EXISTS")
         except Exception as e:
             logs.exception(e)
