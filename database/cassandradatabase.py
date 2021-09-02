@@ -31,7 +31,7 @@ class Database():
                               auth_provider=auth_provider, protocol_version=3,
                               connect_timeout=30,
                               control_connection_timeout=10.0)
-            print(cluster.contact_points)
+
             session = cluster.connect()
 
             db_keyspace = config_object.getConfig(self.database_section_name,
