@@ -11,4 +11,5 @@ query_for_list_of_email_or_username = "select ? from user"
 query_find_course_by_id = "select * from course1 where courseID=?"
 query_delete_course_by_id = "DELETE from course1 where courseID=?"
 query_find_user_by_email = "select * from user where email=? ALLOW Filtering"
+query_find_user_by_id = "select * from user where id=? ALLOW Filtering"
 

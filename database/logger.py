@@ -10,9 +10,9 @@ class Logs:
 
         def __init__(self):
             self.logger = lg.getLogger(__name__)
-            self.logger.setLevel(lg.INFO)
+            self.logger.setLevel(lg.DEBUG)
             formatter = lg.Formatter('%(module)s:: %(asctime)s :: %(levelname)s :: %(message)s')
-            file_handler = lg.FileHandler('E:/University Application/mylogs.log')
+            file_handler = lg.FileHandler('mylogs.log')
             file_handler.setFormatter(formatter)
             self.logger.addHandler(file_handler)
     except Exception as e:

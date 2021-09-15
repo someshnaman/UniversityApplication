@@ -10,7 +10,6 @@ logs = Logs()
 
 
 class Course():
-
     def __init__(self):
         self.course_id = None
         self.course_code = None

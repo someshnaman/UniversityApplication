@@ -15,7 +15,7 @@ class Config():
             :return: returns the Value wrt the given Key
             """
             config = ConfigParser()
-            config.read("E:/University Application/resources/config.ini")
+            config.read("resources/config.ini")
             result = config[section][element]
             logs.info(f"{element} from {section} from config file has been successfully accessed  ")
             return result

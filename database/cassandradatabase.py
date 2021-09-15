@@ -1,8 +1,6 @@
 import json
-
 from cassandra.auth import PlainTextAuthProvider
 from cassandra.cluster import Cluster
-
 from database.congifugration import Config
 from database.logger import Logs
 
@@ -41,6 +39,7 @@ class Database():
             self.session = session
         except Exception as e:
             logs.error(e)
+            raise e
 
     def findAll(self, table_name):
         try:
@@ -56,6 +55,7 @@ class Database():
             return end_result
         except Exception as e:
             logs.exception(f"Can't find the values from the table {table_name},{e}")
+            raise e
 
     def executeSpecific(self, condition, query):
         try:
